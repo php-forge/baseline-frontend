@@ -1,7 +1,7 @@
 <!-- markdownlint-disable MD041 -->
 <p align="center">
     <a href="https://github.com/php-forge/baseline-frontend" target="_blank">
-        <img src="https://avatars.githubusercontent.com/u/103309199?s%25253D400%252526u%25253Dca3561c692f53ed7eb290d3bb226a2828741606f%252526v%25253D4" width="35%" alt="PHP Forge">
+        <img src="https://avatars.githubusercontent.com/u/103309199?s=400&u=ca3561c692f53ed7eb290d3bb226a2828741606f&v=4" width="35%" alt="PHP Forge">
     </a>
     <h1 align="center">Baseline Frontend</h1>
     <br>
@@ -137,8 +137,8 @@ Frontend `package.json` setup:
     "scripts": {
         "format": "prettier --write 'resources/**/*.{js,css,scss}' 'docs/**/*.md' 'package.json'",
         "format:check": "prettier --check 'resources/**/*.{js,css,scss}' 'docs/**/*.md' 'package.json'",
-        "lint:css": "stylelint --config .stylelintrc.json --config-basedir . 'resources/src/**/*.css'",
-        "lint:css:fix": "stylelint --config .stylelintrc.json --config-basedir . --fix 'resources/src/**/*.css'"
+        "lint:css": "stylelint --config .stylelintrc.json --config-basedir . 'resources/src/**/*.{css,scss}'",
+        "lint:css:fix": "stylelint --config .stylelintrc.json --config-basedir . --fix 'resources/src/**/*.{css,scss}'"
     }
 }
 ```
