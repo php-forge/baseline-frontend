@@ -21,6 +21,11 @@
 *.gif  binary
 *.ttf  binary
 
+# Scaffold templates: ship every file under metadata/ in the dist archive. The negation is required because
+# git's gitattributes leaks leading-slash root patterns into nested basenames; this blanket override guarantees
+# scaffold templates reach consumers via the dist archive.
+metadata/**                     -export-ignore
+
 # Exclude files from the archive
 /.editorconfig                  export-ignore
 /.gitattributes                 export-ignore
