@@ -19,4 +19,6 @@ jobs:
       markdownlint-config: .github/linters/.markdown-lint.yml
       prettier-config: .prettierrc.json
       prettier-ignore-path: .prettierignore
-      yamllint-targets: .github
+      yamllint-targets: |-
+        .github
+        metadata/.github

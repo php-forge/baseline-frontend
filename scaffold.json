@@ -1,0 +1,9 @@
+{
+    "copy": [
+        { "from": "metadata/.prettierrc.json", "to": ".prettierrc.json" },
+        { "from": "metadata/.prettierignore", "to": ".prettierignore" },
+        { "from": "metadata/.stylelintignore", "to": ".stylelintignore" },
+        { "from": "metadata/.stylelintrc.json", "to": ".stylelintrc.json" },
+        { "from": "metadata/.github/linters/.stylelintrc.json", "to": ".github/linters/.stylelintrc.json" }
+    ]
+}

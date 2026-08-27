@@ -1,77 +1,159 @@
 <!-- markdownlint-disable MD041 -->
 <p align="center">
-    <picture>
-        <source media="(prefers-color-scheme: dark)" srcset="https://www.yiiframework.com/image/design/logo/yii3_full_for_dark.svg">
-        <source media="(prefers-color-scheme: light)" srcset="https://www.yiiframework.com/image/design/logo/yii3_full_for_light.svg">
-        <img src="https://www.yiiframework.com/image/design/logo/yii3_full_for_light.svg" alt="Yii Framework" width="80%">
-    </picture>
-    <h1 align="center">Template</h1>
+    <a href="https://github.com/php-forge/baseline-frontend" target="_blank">
+        <img src="https://avatars.githubusercontent.com/u/103309199?s%25253D400%252526u%25253Dca3561c692f53ed7eb290d3bb226a2828741606f%252526v%25253D4" width="35%" alt="PHP Forge">
+    </a>
+    <h1 align="center">Baseline Frontend</h1>
     <br>
 </p>
 <!-- markdownlint-enable MD041 -->
 
 <p align="center">
-    <a href="https://github.com/yii2-extensions/template/actions/workflows/build.yml" target="_blank">
-        <img src="https://img.shields.io/github/actions/workflow/status/yii2-extensions/template/build.yml?style=for-the-badge&label=PHPUnit&logo=github" alt="PHPUnit">
-    </a>
-    <a href="https://dashboard.stryker-mutator.io/reports/github.com/yii2-extensions/template/main" target="_blank">
-        <img src="https://img.shields.io/endpoint?style=for-the-badge&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fyii2-extensions%2Ftemplate%2Fmain" alt="Mutation Testing">
-    </a>
-    <a href="https://github.com/yii2-extensions/template/actions/workflows/static.yml" target="_blank">
-        <img src="https://img.shields.io/github/actions/workflow/status/yii2-extensions/template/static.yml?style=for-the-badge&label=PHPStan&logo=github" alt="PHPStan">
-    </a>
-    <a href="https://github.com/yii2-extensions/template/actions/workflows/security.yml" target="_blank">
-        <img src="https://img.shields.io/github/actions/workflow/status/yii2-extensions/template/security.yml?style=for-the-badge&label=Security&logo=github" alt="Security">
-    </a>
+    <strong>Frontend baseline for PHP Forge</strong><br>
+    <em>Prettier and stylelint configs shared via <code>yii2-extensions/scaffold</code>. Pair with <code>php-forge/baseline</code> for core PHP/editor/CI tooling.</em>
 </p>
 
-<p align="center">
-    <strong>A Yii2 extension template to create your own Yii2 extensions</strong><br>
-    <em>PHPUnit, PHPStan, Codeception, and best practices ready out of the box</em>
-</p>
+## System requirements
 
-## Features
+- [`PHP`](https://www.php.net/downloads) 8.3 or higher.
+- [`Composer`](https://getcomposer.org/download/) for dependency management.
 
-<picture>
-    <source media="(min-width: 768px)" srcset="./docs/svgs/features.svg">
-    <img src="./docs/svgs/features-mobile.svg" alt="Feature Overview" style="width: 100%;">
-</picture>
-
-## Quick start
-
-### Installation
+## Installation
 
 ```bash
-composer require github_username/github_repository-name
+composer require php-forge/baseline-frontend:^0.1 --dev
 ```
 
-### Basic Usage
+Or add the dependency manually to `composer.json`:
 
-Describe how to use your extension in a basic way.
+```json
+{
+    "require-dev": {
+        "php-forge/baseline-frontend": "^0.1"
+    }
+}
+```
 
-## Documentation
+Then run `composer update`.
 
-For detailed configuration options and advanced usage.
+## Scaffolded distribution
 
-- 📚 [Installation Guide](docs/installation.md)
-- ⚙️ [Configuration Reference](docs/configuration.md)
-- 💡 [Usage Examples](docs/examples.md)
-- 🧪 [Testing Guide](docs/testing.md)
-- 🛠️ [Development Guide](docs/development.md)
+This package is a [`yii2-extensions/scaffold`](https://github.com/yii2-extensions/scaffold) provider for **frontend
+formatting and linting metadata** (Prettier + stylelint). Templates live under `metadata/` and are mapped to consumer
+roots via the `{from, to}` form in `scaffold.json`.
+
+Opt in by allowing the plugin and listing this package as an authorised provider:
+
+```bash
+composer require yii2-extensions/scaffold:^0.1 --dev
+```
+
+```json
+{
+    "config": {
+        "allow-plugins": {
+            "yii2-extensions/scaffold": true
+        }
+    },
+    "extra": {
+        "scaffold": {
+            "auto": false,
+            "allowed-packages": ["php-forge/baseline-frontend"]
+        }
+    }
+}
+```
+
+With `auto: false`, the plugin does not run on `composer install`; sync templates manually:
+
+```bash
+vendor/bin/scaffold reapply --provider=php-forge/baseline-frontend
+vendor/bin/scaffold diff <file>
+vendor/bin/scaffold status
+```
+
+### Files distributed
+
+```text
+.
+├── .prettierrc.json                   # replace: Prettier formatting rules (tabWidth 4, yml/md overrides)
+├── .prettierignore                    # replace: Paths Prettier should skip
+├── .stylelintignore                   # replace: Paths stylelint should skip
+├── .stylelintrc.json                  # replace: stylelint config (standard-scss)
+└── .github
+    └── linters
+        └── .stylelintrc.json          # replace: stylelint config for CI (mirrors root)
+```
+
+> **Why two `.stylelintrc.json`?** Some projects invoke `stylelint --config .stylelintrc.json` (root), others use
+> `stylelint --config .github/linters/.stylelintrc.json --config-basedir .` (as in `php-forge/debug-core`). This
+> provider ships both targets from the same source so either invocation works after scaffold.
+
+Mode semantics:
+
+- `replace`: lock-step with this package. Local edits trigger a warning and the file is skipped on update.
+- `append`: provider content is merged into the existing file; consumer additions never blown away.
+- `preserve`: file is written once on first install and never overwritten.
+
+## Related packages
+
+For core PHP editor, git and generic linter configs, see [`php-forge/baseline`](https://github.com/php-forge/baseline).
+For ECS and Rector configurations and their root wrapper templates, see
+[`php-forge/coding-standard`](https://github.com/php-forge/coding-standard). The three packages are independent — adopt
+any combination.
+
+Install only `baseline` for pure PHP libraries. Add `baseline-frontend` in projects with JS/CSS/SCSS or where
+`quality.yml` needs `prettier-config`/`prettier-ignore-path` (optional inputs):
+
+```json
+{
+    "require-dev": {
+        "php-forge/baseline": "^0.1",
+        "php-forge/baseline-frontend": "^0.1",
+        "php-forge/coding-standard": "^0.3",
+        "yii2-extensions/scaffold": "^0.1"
+    },
+    "extra": {
+        "scaffold": {
+            "allowed-packages": [
+                "php-forge/baseline",
+                "php-forge/baseline-frontend",
+                "php-forge/coding-standard"
+            ]
+        }
+    }
+}
+```
+
+Frontend `package.json` setup:
+
+```json
+{
+    "devDependencies": {
+        "prettier": "^3.9.6",
+        "stylelint": "^17.14.1",
+        "stylelint-config-standard-scss": "^17.0.0"
+    },
+    "scripts": {
+        "format": "prettier --write 'resources/**/*.{js,css,scss}' 'docs/**/*.md' 'package.json'",
+        "format:check": "prettier --check 'resources/**/*.{js,css,scss}' 'docs/**/*.md' 'package.json'",
+        "lint:css": "stylelint --config .stylelintrc.json --config-basedir . 'resources/src/**/*.css'",
+        "lint:css:fix": "stylelint --config .stylelintrc.json --config-basedir . --fix 'resources/src/**/*.css'"
+    }
+}
+```
 
 ## Package information
 
 [![PHP](https://img.shields.io/badge/%3E%3D8.3-777BB4.svg?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/releases/8.3/en.php)
-[![Yii 22.0.x](https://img.shields.io/badge/22.0.x-0073AA.svg?style=for-the-badge&logo=yii&logoColor=white)](https://github.com/yiisoft/yii2/tree/22.0)
-[![Latest Stable Version](https://img.shields.io/packagist/v/yii2-extensions/template.svg?style=for-the-badge&logo=packagist&logoColor=white&label=Stable)](https://packagist.org/packages/yii2-extensions/template)
-[![Total Downloads](https://img.shields.io/packagist/dt/yii2-extensions/template.svg?style=for-the-badge&logo=composer&logoColor=white&label=Downloads)](https://packagist.org/packages/yii2-extensions/template)
+[![Latest Stable Version](https://img.shields.io/packagist/v/php-forge/baseline-frontend.svg?style=for-the-badge&logo=packagist&logoColor=white&label=Stable)](https://packagist.org/packages/php-forge/baseline-frontend)
+[![Total Downloads](https://img.shields.io/packagist/dt/php-forge/baseline-frontend.svg?style=for-the-badge&logo=composer&logoColor=white&label=Downloads)](https://packagist.org/packages/php-forge/baseline-frontend)
 
 ## Project status
 
-[![Codecov](https://img.shields.io/codecov/c/github/yii2-extensions/template.svg?style=for-the-badge&logo=codecov&logoColor=white&label=Coverage)](https://codecov.io/github/yii2-extensions/template)
-[![PHPStan Level Max](https://img.shields.io/badge/PHPStan-Level%20Max-4F5D95.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/yii2-extensions/template/actions/workflows/static.yml)
-[![Quality](https://img.shields.io/github/actions/workflow/status/yii2-extensions/template/quality.yml?style=for-the-badge&label=Quality&logo=github)](https://github.com/yii2-extensions/template/actions/workflows/quality.yml)
-[![StyleCI](https://img.shields.io/badge/StyleCI-Passed-44CC11.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.styleci.io/repos/698621511?branch=main)
+[![Quality](https://img.shields.io/github/actions/workflow/status/php-forge/baseline-frontend/quality.yml?style=for-the-badge&label=Quality&logo=github)](https://github.com/php-forge/baseline-frontend/actions/workflows/quality.yml)
+[![Security](https://img.shields.io/github/actions/workflow/status/php-forge/baseline-frontend/security.yml?style=for-the-badge&label=Security&logo=github)](https://github.com/php-forge/baseline-frontend/actions/workflows/security.yml)
+[![StyleCI](https://img.shields.io/badge/StyleCI-Passed-44CC11.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.styleci.io/repos/php-forge/baseline-frontend?branch=main)
 
 ## Our social networks
 
